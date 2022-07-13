@@ -23,13 +23,32 @@ const postCRUD = async (req, res) => {
 };
 
 //[GET] /get-crud
-const displayGetCRUD = (req,res) =>{
-    res.send("DISPLAY GET CRUD")
-}
+const displayGetCRUD = async (req, res) => {
+    const data = await CRUDservice.getCRUD();
+    res.render('displayGetCRUD.ejs', {
+        data,
+    });
+};
+
+const getEditCRUD = async (req, res) => {
+    const id = req.query.id;
+    const data = await CRUDservice.getUserById(id);
+    res.render('editCRUD.ejs', {
+        data,
+    });
+};
+
+const updateCRUD = async (req, res) => {
+    const data = req.body;
+    await CRUDservice.updateCRUD(data);
+    res.send('Update successfully');
+};
 
 module.exports = {
     getHomePage,
     getCRUD,
     postCRUD,
     displayGetCRUD,
+    getEditCRUD,
+    updateCRUD,
 };
