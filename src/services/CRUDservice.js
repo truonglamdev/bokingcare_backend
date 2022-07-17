@@ -61,21 +61,16 @@ const getUserById = (id) => {
 const updateCRUD = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const hashPassword = await hashUserPassword(data.password);
-            await db.User.update(
-                {
-                    email: data.email,
-                    password: hashPassword,
-                    firstName: data.firstName,
-                    lastName: data.lastName,
-                    address: data.address,
-                    phoneNumber: data.phoneNumber,
-                    gender: data.gender === '1' ? true : false,
-                    roleId: data.roleId,
-                },
-                { id: data.id },
-            );
-            resolve('successfully');
+            const dataUser = await db.User.findOne({ where: { id: data.id } });
+            if (dataUser) {
+                dataUser.firstName = data.firstName;
+                dataUser.lastName = data.lastName;
+                dataUser.address = data.address;
+                await dataUser.save();
+                resolve();
+            } else {
+                resolve();
+            }
         } catch (e) {
             reject(e);
         }
